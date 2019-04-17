@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-  
-    
-    <entry>
-      <title>对Everybody dance now中的姿态归一化</title>
-      <link href="/hello-world/"/>
-      <url>/hello-world/</url>
-      
-        <content type="html"><![CDATA[<p>Everybody dance now所呈现出来的效果太惊艳了，目前已有不少小伙伴复现出该工作，遗憾的是目前还未发现有实现文中所述的骨架图全局归一化部分的项目，这里给出我的一些疑问和浅见。<br><a id="more"></a></p><h5 id="为什么要归一化"><a href="#为什么要归一化" class="headerlink" title="为什么要归一化"></a>为什么要归一化</h5><p>简单来说，Everybody dance now完成的是两个人间的“do as I do”任务，也就是要将一个人的肢体动作、面部姿态以及表情完美重演到另一个人上，这也是一个 many-to-one 任务。由于不同人的身高、身材比例会不一样，所以需要将源人的姿态和目标人的姿态归一化。</p><h5 id="如何归一化"><a href="#如何归一化" class="headerlink" title="如何归一化"></a>如何归一化</h5><p>归一化方法较为简单：（1）求取源图像和目标图像间的放缩比例scale；（2）求取源图像在目标图像中对应的偏移量b。将源图像按放缩比例放缩后，再根据偏移量移动对应像素即可，公式如下：<br><img src="/images/pasted-1.png" alt="scale"><br><img src="/images/pasted-2.png" alt="b"><br>文中选取两个脚踝关节点为参考点，对y方向进行归一化操作。公式里t_far、t_close分别为目标视频中最小和最大脚踝关键点的高度,t_min、t_max分别为目标视频中最小和最大的脚踝关键点位置，t_far、t_close、t_min、t_max为源视频的。a_source为源视频当前帧两个脚踝关节点的平均位置。</p><h5 id="一些疑问和浅见"><a href="#一些疑问和浅见" class="headerlink" title="一些疑问和浅见"></a>一些疑问和浅见</h5><p>这里有这么几个疑问。<br>1）公式中f_source的含义。<br>文中并未给出解释，按对公式的理解，是要将a_source归一化到(t_min-f_source,t_max-f_source)之间。机器之心的翻译文中将f_source理解为“当前帧相对于第一帧的姿态位置偏移量”，如果减去相对于第一帧的偏移量，相当于将源视频帧人物固定在同一位置，再求取相对于目标视频的偏移量，这种做法也是可解释的。同时，更直观一点，会不会是文中将a_source误拼写为f_source了呢？</p><p>2）文中只针对y方向归一化。<br>要明确的一点是，scale是对整体进行的，否则scale出来的人体形变会非常严重。文中未提及为什么只对y方向归一化，我的理解是人体宽度相对于整个画面占比有限，x方向并不能提供太大的作用。从我的结果看，算偏移量的时候可以同时计算b_x，b_y，整体影响不大。</p><h5 id="References"><a href="#References" class="headerlink" title="References"></a>References</h5><p><a href="https://arxiv.org/abs/1808.07371" target="_blank" rel="noopener">arXiv</a><br><a href="https://www.jiqizhixin.com/articles/2018-10-31-20" target="_blank" rel="noopener">机器之心译文</a></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-  
-  
+<search>
+  <entry>
+    <title><![CDATA[Everybody Dance Now中的姿态归一化]]></title>
+    <url>%2Feverybody-dance-now%2F</url>
+    <content type="text"><![CDATA[Everybody Dance Now所呈现出来的效果太惊艳了，目前已有不少小伙伴复现出该工作，这里主要说下我对文中的人体姿态归一化部分的理解。 为什么要归一化简单来说，Everybody Dance Now完成的是两个人间的“do as I do”任务，也就是要将一个人的肢体动作、面部姿态以及表情完美重演到另一个人上，这也是一个 many-to-one 任务。由于不同人的身高、身材比例会不一样，所以需要将源人的姿态和目标人的姿态归一化。 如何归一化归一化方法较为简单：（1）求取源图像和目标图像间的放缩比例scale；（2）求取源图像在目标图像中对应的偏移量b。将源图像按放缩比例放缩后，再根据偏移量移动对应像素即可，公式如下：文中选取两个脚踝关节点为参考点，对y方向进行归一化操作。公式里t_far、t_close分别为目标视频中最小和最大脚踝关键点的高度,t_min、t_max分别为目标视频中最小和最大的脚踝关键点位置，t_far、t_close、t_min、t_max为源视频的。a_source为源视频当前帧两个脚踝关节点的平均位置。 几点疑问和一些见解这里有这么几个疑问。1）f_source的含义。文中并未给出解释，按对公式的理解，是要将a_source归一化到(t_min-f_source,t_max-f_source)之间。机器之心的翻译文中将f_source理解为“当前帧相对于第一帧的姿态位置偏移量”，如果减去相对于第一帧的偏移量，相当于将源视频帧人物固定在同一位置，再求取相对于目标视频的偏移量，这种做法也是可解释的。当然，也可能是文中将a_source误拼写为f_source。 2）只针对y方向归一化。要明确的一点是，scale是对整体进行的，否则scale出来的人体形变会非常严重。文中未提及为什么只对y方向归一化，我的理解是人体宽度相对于整个画面占比有限，x方向并不能提供太大的作用。从我的结果看，算偏移量的时候可以同时计算b_x，b_y，整体影响不大。 ReferencesarXiv机器之心译文]]></content>
+      <categories>
+        <category>Paper Reading</category>
+      </categories>
+      <tags>
+        <tag>GAN</tag>
+      </tags>
+  </entry>
 </search>
